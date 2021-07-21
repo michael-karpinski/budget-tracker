@@ -10,9 +10,9 @@
 </head>
 
 <body>
-    <div id='income-div'>
-        <h1 id='test'>Income</h1>
-        <button id='add-income-button'>Add Source</button>
+    <div>
+        <h1>Income</h1>
+        <button id='add-income-button'>Add Income</button>
         <form id='add-income-form' hidden>
             <label for='source'>Source:</label><br>
             <input type='text' id='new-income-source' name='new-income-source'><br>
@@ -20,6 +20,20 @@
             <input type='number' id='new-income-amount' name='new-income-amount'>
             <input type='submit' value='Submit' hidden>
         </form>
+        <div id='income-div'></div>
+    </div>
+
+    <div>
+        <h1>Expenses</h1>
+        <button id='add-expense-button'>Add Expense</button>
+        <form id='add-expense-form' hidden>
+            <label for='source'>Source:</label><br>
+            <input type='text' id='new-expense-source' name='new-expense-source'><br>
+            <label for='amount'>Amount:</label><br>
+            <input type='number' id='new-expense-amount' name='new-expense-amount'>
+            <input type='submit' value='Submit' hidden>
+        </form>
+        <div id='expense-div'></div>
     </div>
 
     <script src='front_end.js'></script>

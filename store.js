@@ -10,8 +10,8 @@ class Store {
         this.data = parseDataFile(this.path, opts.defaults)
         if (this.get('income') == undefined)
             this.set('income', [])
-        if (this.get('expenses') == undefined)
-            this.set('expenses', [])
+        if (this.get('expense') == undefined)
+            this.set('expense', [])
     }
 
     get(key) {
@@ -21,7 +21,6 @@ class Store {
     set(key, val) {
         this.data[key] = val
         fs.writeFileSync(this.path, JSON.stringify(this.data))
-        console.log(this.data)
     }
 }
 
