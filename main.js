@@ -34,7 +34,6 @@ app.whenReady().then(() => {
     window.on('resize', () => {
         let { width, height } = window.getBounds()
         store.set('windowBounds', { width, height })
-        console.log('WINDOW RESIZED')
     })
 })
 
