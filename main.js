@@ -1,6 +1,5 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-const os = require('os')
 const Store = require('./store.js')
 
 const store = new Store({
