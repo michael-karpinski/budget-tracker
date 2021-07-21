@@ -44,6 +44,6 @@ app.whenReady().then(() => {
     })
 
     ipcMain.on('set', (event, args) => {
-        console.log('Setting data . . .')
+        store.set(args.key, args.value)
     })
 })

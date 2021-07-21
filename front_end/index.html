@@ -12,12 +12,13 @@
 <body>
     <div id='income-div'>
         <h1 id='test'>Income</h1>
-        <button id='add-income-source'>Add Source</button>
-        <form id='add-income-form'>
+        <button id='add-income-button'>Add Source</button>
+        <form id='add-income-form' hidden>
             <label for='source'>Source:</label><br>
-            <input type='text' id='source' name='source'><br>
+            <input type='text' id='new-income-source' name='new-income-source'><br>
             <label for='amount'>Amount:</label><br>
-            <input type='text' id='amount' name='amount'>
+            <input type='text' id='new-income-amount' name='new-income-amount'>
+            <input type='submit' value='Submit'>
         </form>
     </div>
 

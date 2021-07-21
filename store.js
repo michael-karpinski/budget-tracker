@@ -9,9 +9,9 @@ class Store {
         this.path = path.join(userDataPath, opts.configName + '.json')
         this.data = parseDataFile(this.path, opts.defaults)
         if (this.get('income') == undefined)
-            this.set('income', {})
+            this.set('income', [])
         if (this.get('expenses') == undefined)
-            this.set('expenses', {})
+            this.set('expenses', [])
     }
 
     get(key) {
