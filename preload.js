@@ -11,10 +11,11 @@ window.addEventListener('DOMContentLoaded', () => {
     let expenseData
 
     ipcRenderer.send('get', 'income')
-    ipcRenderer.send('get', 'expenses')
     ipcRenderer.on('incomeReply', (event, arg) => {
         incomeData = arg
     })
+
+    ipcRenderer.send('get', 'expenses')
     ipcRenderer.on('expensesReply', (event, arg) => {
         expenseData = arg
     })
@@ -22,13 +23,19 @@ window.addEventListener('DOMContentLoaded', () => {
     addIncomeButton.addEventListener('click', () => {
         addIncomeForm.removeAttribute('hidden')
     })
+
     addIncomeForm.addEventListener('submit', (e) => {
         e.preventDefault()
+
         incomeData.push({
             'src': newIncomeSource.value,
-            'income': newIncomeAmount.value
+            'income': parseFloat(newIncomeAmount.value).toFixed(2)
         })
         saveData('income', incomeData)
+
+        addIncomeForm.setAttribute('hidden', '')
+        newIncomeAmount.value = ''
+        newIncomeSource.value = ''
     })
 })
 
