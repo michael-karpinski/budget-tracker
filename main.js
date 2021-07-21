@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const Store = require('./store.js')
 
@@ -30,12 +30,20 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 
+    app.on('window-all-closed', function () {
+        if (process.platform !== 'darwin') app.quit()
+    })
+
     window.on('resize', () => {
         let { width, height } = window.getBounds()
         store.set('windowBounds', { width, height })
     })
-})
 
-app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') app.quit()
+    ipcMain.on('get', (event, args) => {
+        event.sender.send(args + 'Reply', store.get(args))
+    })
+
+    ipcMain.on('set', (event, args) => {
+        console.log('Setting data . . .')
+    })
 })
