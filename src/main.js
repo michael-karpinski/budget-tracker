@@ -12,7 +12,8 @@ const store = new Store({
 function createWindow() {
     const win = new BrowserWindow({
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js'),
+            enableRemoteModule: true
         }
     })
 

@@ -1,4 +1,5 @@
-const { ipcRenderer } = require("electron")
+const { ipcRenderer, remote } = require('electron')
+const dialog = remote.dialog
 
 
 class MoneyFlow {
@@ -122,12 +123,23 @@ class MoneyFlow {
     }
 
     /**
-     * Add income source to data array and save.
+     * After validating source name is unique, add income source to data array and save.
+     * If source name is not unique, display error message to user.
      * @param {Object} source Income source to be added.
      */
-    addFlow(source) {
-        this.data.push(source)
+    addFlow(flow) {
+        if (!this.findFlow(flow.source))
+            this.data.push(flow)
+        else
+            dialog.showErrorBox('Error', 'Please enter a unique source name.');
         this.saveData()
+    }
+
+    findFlow(source) {
+        for (let i = 0; i < this.data.length; i++)
+            if (source == this.data[i].source)
+                return true
+        return false
     }
 
     /**
