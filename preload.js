@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const newExpenseAmount = document.getElementById('new-expense-amount')
     const newExpenseAutomatic = document.getElementById('new-expense-automatic')
     const newExpenseDateVisibility = document.getElementById('new-expense-date-visibility')
-    const newExpenseDate = document.getElementById('newExpenseDate')
+    const newExpenseDate = document.getElementById('new-expense-date')
     const expenseDiv = document.getElementById('expense-div')
 
     let incomeData
@@ -31,7 +31,15 @@ window.addEventListener('DOMContentLoaded', () => {
     ipcRenderer.send('get', 'expense')
     ipcRenderer.on('expenseReply', (event, arg) => {
         expenseData = arg
-        populateExpenses(expenseData, expenseDiv)
+        populateExpense(expenseData, expenseDiv)
+    })
+
+    ipcRenderer.on('incomeSaved', (event, arg) => {
+        populateIncome(incomeData, incomeDiv)
+    })
+
+    ipcRenderer.on('expenseSaved', (event, arg) => {
+        populateExpense(expenseData, expenseDiv)
     })
 
     // When "Add Income" button is clicked, show the add income form.
@@ -65,9 +73,14 @@ window.addEventListener('DOMContentLoaded', () => {
     addExpenseForm.addEventListener('submit', (e) => {
         e.preventDefault()
 
+        let withdrawalDate = 0
+        if (newExpenseAutomatic.checked)
+            withdrawalDate = parseInt(newExpenseDate.value)
         expenseData.push({
             'src': newExpenseSource.value,
-            'amount': parseFloat(newExpenseAmount.value).toFixed(2)
+            'amount': parseFloat(newExpenseAmount.value).toFixed(2),
+            'withdrawalDate': withdrawalDate,
+            'paidForMonth': false
         })
         saveData('expense', expenseData)
 
@@ -77,7 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
         newExpenseAutomatic.checked = false
         newExpenseDateVisibility.setAttribute('hidden', '')
 
-        populateExpenses(expenseData, expenseDiv)
+        populateExpense(expenseData, expenseDiv)
     })
 
     // When "Automatic Withdrawal?" box is toggled on expense form, toggle visibility of withdrawal date.
@@ -102,7 +115,7 @@ function populateIncome(incomeData, incomeDiv) {
     }))
 }
 
-function populateExpenses(expenseData, expenseDiv) {
+function populateExpense(expenseData, expenseDiv) {
     // Populate expense display.
     expenseDiv.innerHTML = ''
     expenseData.forEach((expenseSource => {
@@ -112,7 +125,41 @@ function populateExpenses(expenseData, expenseDiv) {
         amount.innerText = expenseSource.amount
         expenseDiv.appendChild(header)
         expenseDiv.appendChild(amount)
+        if (expenseSource.withdrawalDate > 0) {
+            const withdrawalDateText = document.createElement('p')
+            withdrawalDateText.innerText = 'Normally withdrawn on the ' + expenseSource.withdrawalDate + ' of every month.'
+            expenseDiv.appendChild(withdrawalDateText)
+        }
+        else {
+            const paidCheck = document.createElement('div')
+            const paidCheckText = document.createElement('p')
+            const paidCheckBox = document.createElement('input')
+            paidCheck.appendChild(paidCheckText)
+            paidCheck.appendChild(paidCheckBox)
+            expenseDiv.appendChild(paidCheck)
+            paidCheckText.innerText = 'Have you paid this for the month of ' + new Date().toLocaleString('default', { month: 'long' }) + '?'
+            paidCheckBox.setAttribute('type', 'checkbox')
+            console.log(expenseSource.paidForMonth)
+            if (expenseSource.paidForMonth)
+                paidCheckBox.checked = true
+            paidCheckBox.addEventListener('change', () => togglePaid(expenseData, expenseSource, paidCheckBox))
+        }
     }))
+
+    function togglePaid(expenseData, expenseSource, paidCheckBox) {
+        expenseData.find((expense, i) => {
+            if (expense.src === expenseSource.src) {
+                expenseData[i] = {
+                    'src': expenseSource.src,
+                    'amount': expenseSource.amount,
+                    'withdrawalDate': expenseSource.withdrawalDate,
+                    'paidForMonth': paidCheckBox.checked
+                }
+            }
+        })
+        console.log(expenseData)
+        saveData('expense', expenseData)
+    }
 }
 
 function saveData(key, value) {
