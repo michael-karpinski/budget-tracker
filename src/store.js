@@ -8,6 +8,8 @@ class Store {
         const userDataPath = (electron.app || electron.remote.app).getPath('userData')
         this.path = path.join(userDataPath, opts.configName + '.json')
         this.data = parseDataFile(this.path, opts.defaults)
+        if (this.data == undefined)
+            this.data = {}
         if (this.get('income') == undefined)
             this.set('income', [])
         if (this.get('expense') == undefined)
