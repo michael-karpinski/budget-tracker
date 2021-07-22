@@ -16,7 +16,7 @@ function createWindow() {
         }
     })
 
-    win.loadFile('front_end/index.html')
+    win.loadFile('src/index.html')
     return win
 }
 
