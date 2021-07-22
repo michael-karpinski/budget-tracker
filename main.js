@@ -3,17 +3,14 @@ const path = require('path')
 const Store = require('./store.js')
 
 const store = new Store({
-    configName: 'user-data',
-    defaults: {
-        windowBounds: { width: 800, height: 600 }
-    }
+    configName: 'user-data'
 })
 
+/**
+ * Create main application window.
+ */
 function createWindow() {
-    let { width, height } = store.get('windowBounds')
     const win = new BrowserWindow({
-        width: width,
-        height: height,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
@@ -34,15 +31,13 @@ app.whenReady().then(() => {
         if (process.platform !== 'darwin') app.quit()
     })
 
-    window.on('resize', () => {
-        let { width, height } = window.getBounds()
-        store.set('windowBounds', { width, height })
-    })
-
+    // When a get request is received, respond with title and associated data.
+    // Example response: 'incomeReply', [{INCOME SOURCE}, {INCOME SOURCE}, . . .]
     ipcMain.on('get', (event, args) => {
         event.sender.send(args + 'Reply', store.get(args))
     })
 
+    // When a set request is received, save the data to store; then respond with title and associated data.
     ipcMain.on('set', (event, args) => {
         store.set(args.key, args.value)
         event.sender.send(args.key + 'Reply', store.get(args.key))

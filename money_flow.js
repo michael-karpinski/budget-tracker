@@ -15,25 +15,39 @@ class MoneyFlow {
         })
     }
 
+    /**
+     * Capitalize the first letter of a String.
+     * @param {String} text Text to capitalize.
+     * @returns             Capitalized text.
+     */
     capitalize(text) {
         return text.charAt(0).toUpperCase() + text.slice(1);
     }
 
+    /**
+     * Populate the view for this flow.
+     */
     populate() {
         this.div.innerHTML = ''
 
         this.createHeader()
         this.createAddButton()
         this.createAddForm()
-        this.createSourcesDiv()
+        this.createExpensesDiv()
     }
 
+    /**
+     * Create header - h1 element whose text is the type of flow.
+     */
     createHeader() {
         let header = document.createElement('h1')
         header.innerText = this.capitalize(this.type)
         this.div.appendChild(header)
     }
 
+    /**
+     * Create add button, which displays add form when clicked.
+     */
     createAddButton() {
         let addSourceButton = document.createElement('button')
         addSourceButton.innerText = 'Add ' + this.capitalize(this.type)
@@ -41,6 +55,9 @@ class MoneyFlow {
         this.div.appendChild(addSourceButton)
     }
 
+    /**
+     * Create add form - when submitted, parse input and add new source to data list.
+     */
     createAddForm() {
         this.addForm = document.createElement('form')
         this.addForm.setAttribute('hidden', '')
@@ -72,7 +89,7 @@ class MoneyFlow {
 
         this.addForm.addEventListener('submit', (e) => {
             e.preventDefault()
-            this.addSource({
+            this.addFlow({
                 'source': sourceInput.value,
                 'amount': parseFloat(amountInput.value).toFixed(2)
             })
@@ -81,7 +98,10 @@ class MoneyFlow {
         this.div.appendChild(this.addForm)
     }
 
-    createSourcesDiv() {
+    /**
+     * Create and populate display for this flow's sources.
+     */
+    createExpensesDiv() {
         let sourcesDiv = document.createElement('div')
         this.data.forEach((source => {
             const header = document.createElement('h2')
@@ -94,15 +114,25 @@ class MoneyFlow {
         this.div.appendChild(sourcesDiv)
     }
 
+    /**
+     * Show add form.
+     */
     toggleFormVisibility() {
         this.addForm.removeAttribute('hidden')
     }
 
-    addSource(source) {
+    /**
+     * Add income source to data array and save.
+     * @param {Object} source Income source to be added.
+     */
+    addFlow(source) {
         this.data.push(source)
         this.saveData()
     }
 
+    /**
+     * Send data to back-end for saving.
+     */
     saveData() {
         ipcRenderer.send('set', { 'key': this.type, 'value': this.data })
     }
