@@ -12,6 +12,9 @@ window.addEventListener('DOMContentLoaded', () => {
     const addExpenseForm = document.getElementById('add-expense-form')
     const newExpenseSource = document.getElementById('new-expense-source')
     const newExpenseAmount = document.getElementById('new-expense-amount')
+    const newExpenseAutomatic = document.getElementById('new-expense-automatic')
+    const newExpenseDateVisibility = document.getElementById('new-expense-date-visibility')
+    const newExpenseDate = document.getElementById('newExpenseDate')
     const expenseDiv = document.getElementById('expense-div')
 
     let incomeData
@@ -67,6 +70,13 @@ window.addEventListener('DOMContentLoaded', () => {
         newExpenseSource.value = ''
 
         populateExpenses(expenseData, expenseDiv)
+    })
+
+    newExpenseAutomatic.addEventListener('click', (e) => {
+        if (newExpenseAutomatic.checked)
+            newExpenseDateVisibility.removeAttribute('hidden')
+        else
+            newExpenseDateVisibility.setAttribute('hidden', '')
     })
 })
 

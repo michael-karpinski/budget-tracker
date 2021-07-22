@@ -30,7 +30,13 @@
             <label for='source'>Source:</label><br>
             <input type='text' id='new-expense-source' name='new-expense-source'><br>
             <label for='amount'>Amount:</label><br>
-            <input type='number' id='new-expense-amount' name='new-expense-amount'>
+            <input type='number' id='new-expense-amount' name='new-expense-amount'><br>
+            <label for='new-expense-automatic'>Automatic Withdrawal?</label><br>
+            <input type='checkbox' id='new-expense-automatic' name='new-expense-automatic'><br>
+            <div id='new-expense-date-visibility' hidden>
+                <label for='new-expense-date'>Day of Withdrawal (1-31):</label><br>
+                <input type='number' id='new-expense-day' name='new-expense-day' min="1" max="31">
+            </div>
             <input type='submit' value='Submit' hidden>
         </form>
         <div id='expense-div'></div>
