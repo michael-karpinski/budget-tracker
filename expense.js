@@ -1,4 +1,3 @@
-const { ipcRenderer } = require("electron")
 const MoneyFlow = require('./money_flow.js')
 
 class Expense extends MoneyFlow {

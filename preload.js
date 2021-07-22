@@ -1,4 +1,3 @@
-const { contextBridge, ipcRenderer } = require('electron')
 const Income = require('./income.js')
 const Expense = require('./expense.js')
 
