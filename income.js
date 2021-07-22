@@ -12,7 +12,6 @@ class Income {
             this.data = data
             this.populate()
         })
-        ipcRenderer.on('incomeSaved', (event, arg) => this.populate())
     }
 
     populate() {

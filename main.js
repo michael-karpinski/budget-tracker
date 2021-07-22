@@ -45,6 +45,6 @@ app.whenReady().then(() => {
 
     ipcMain.on('set', (event, args) => {
         store.set(args.key, args.value)
-        event.sender.send(args.key + 'Saved')
+        event.sender.send(args.key + 'Reply', store.get(args.key))
     })
 })
