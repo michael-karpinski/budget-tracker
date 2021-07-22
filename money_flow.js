@@ -100,7 +100,7 @@ class MoneyFlow {
         console.log('ADDING SOURCE')
         this.data.push({
             'source': source,
-            'amount': amount
+            'amount': parseFloat(amount).toFixed(2)
         })
         this.saveData()
     }
