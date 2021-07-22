@@ -20,22 +20,26 @@ window.addEventListener('DOMContentLoaded', () => {
     let incomeData
     let expenseData
 
+    // Setup communication for income data.
     ipcRenderer.send('get', 'income')
     ipcRenderer.on('incomeReply', (event, arg) => {
         incomeData = arg
         populateIncome(incomeData, incomeDiv)
     })
 
+    // Setup communication for expense data.
     ipcRenderer.send('get', 'expense')
     ipcRenderer.on('expenseReply', (event, arg) => {
         expenseData = arg
         populateExpenses(expenseData, expenseDiv)
     })
 
+    // When "Add Income" button is clicked, show the add income form.
     addIncomeButton.addEventListener('click', () => {
         addIncomeForm.removeAttribute('hidden')
     })
 
+    // When add income form is submitted, save new income data, reset and hide form, and populate income display.
     addIncomeForm.addEventListener('submit', (e) => {
         e.preventDefault()
 
@@ -52,10 +56,12 @@ window.addEventListener('DOMContentLoaded', () => {
         populateIncome(incomeData, incomeDiv)
     })
 
+    // When "Add Expense" button is clicked, show the add expense form.
     addExpenseButton.addEventListener('click', () => {
         addExpenseForm.removeAttribute('hidden')
     })
 
+    // When add expense form is submitted, save new expense data, reset and hide form, and populate expense display.
     addExpenseForm.addEventListener('submit', (e) => {
         e.preventDefault()
 
@@ -68,10 +74,13 @@ window.addEventListener('DOMContentLoaded', () => {
         addExpenseForm.setAttribute('hidden', '')
         newExpenseAmount.value = ''
         newExpenseSource.value = ''
+        newExpenseAutomatic.checked = false
+        newExpenseDateVisibility.setAttribute('hidden', '')
 
         populateExpenses(expenseData, expenseDiv)
     })
 
+    // When "Automatic Withdrawal?" box is toggled on expense form, toggle visibility of withdrawal date.
     newExpenseAutomatic.addEventListener('click', (e) => {
         if (newExpenseAutomatic.checked)
             newExpenseDateVisibility.removeAttribute('hidden')
@@ -81,6 +90,7 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 function populateIncome(incomeData, incomeDiv) {
+    // Populate income display.
     incomeDiv.innerHTML = ''
     incomeData.forEach((incomeSource => {
         const header = document.createElement('h2')
@@ -93,6 +103,7 @@ function populateIncome(incomeData, incomeDiv) {
 }
 
 function populateExpenses(expenseData, expenseDiv) {
+    // Populate expense display.
     expenseDiv.innerHTML = ''
     expenseData.forEach((expenseSource => {
         const header = document.createElement('h2')
