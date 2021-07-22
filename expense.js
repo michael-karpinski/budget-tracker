@@ -61,7 +61,18 @@ class Expense extends MoneyFlow {
         submitButton.setAttribute('hidden', '')
         this.addForm.appendChild(submitButton)
 
-        this.addForm.addEventListener('submit', (e) => this.addSource(e, sourceInput.value, amountInput.value, automaticInput.value, withdrawalDateInput.value))
+        this.addForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            let withdrawalDate = withdrawalDateInput.value
+            if (!automaticInput.checked)
+                withdrawalDate = 0
+            this.addSource({
+                'source': sourceInput.value,
+                'amount': parseFloat(amountInput.value).toFixed(2),
+                'withdrawalDate': withdrawalDate,
+                'paidForMonth': false
+            })
+        })
 
         this.div.appendChild(this.addForm)
     }
@@ -91,7 +102,6 @@ class Expense extends MoneyFlow {
                 sourcesDiv.appendChild(paidCheck)
                 paidCheckText.innerText = 'Have you paid this for the month of ' + new Date().toLocaleString('default', { month: 'long' }) + '?'
                 paidCheckBox.setAttribute('type', 'checkbox')
-                console.log(source.paidForMonth)
                 if (source.paidForMonth)
                     paidCheckBox.checked = true
                 paidCheckBox.addEventListener('change', () => this.togglePaid(source, paidCheckBox))
@@ -119,20 +129,6 @@ class Expense extends MoneyFlow {
             withdrawalDateDiv.removeAttribute('hidden')
         else
             withdrawalDateDiv.setAttribute('hidden', '')
-    }
-
-    addSource(e, source, amount, automatic, withdrawalDate) {
-        e.preventDefault()
-
-        if (!automatic)
-            withdrawalDate = 0
-        this.data.push({
-            'source': source,
-            'amount': parseFloat(amount).toFixed(2),
-            'withdrawalDate': withdrawalDate,
-            'paidForMonth': false
-        })
-        this.saveData()
     }
 }
 

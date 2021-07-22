@@ -3,8 +3,6 @@ const { ipcRenderer } = require("electron")
 
 class MoneyFlow {
     constructor(div, type) {
-        console.log('Initiating MoneyFlow.')
-        console.log('Type: ' + type)
         this.div = div
         this.type = type
         this.data
@@ -12,7 +10,6 @@ class MoneyFlow {
 
         ipcRenderer.send('get', this.type)
         ipcRenderer.on(this.type + 'Reply', (event, data) => {
-            console.log('Received ' + this.type + ' data.')
             this.data = data
             this.populate()
         })
@@ -73,7 +70,13 @@ class MoneyFlow {
         submitButton.setAttribute('hidden', '')
         this.addForm.appendChild(submitButton)
 
-        this.addForm.addEventListener('submit', (e) => this.addSource(e, sourceInput.value, amountInput.value))
+        this.addForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            this.addSource({
+                'source': sourceInput.value,
+                'amount': parseFloat(amountInput.value).toFixed(2)
+            })
+        })
 
         this.div.appendChild(this.addForm)
     }
@@ -95,13 +98,8 @@ class MoneyFlow {
         this.addForm.removeAttribute('hidden')
     }
 
-    addSource(e, source, amount) {
-        e.preventDefault()
-        console.log('ADDING SOURCE')
-        this.data.push({
-            'source': source,
-            'amount': parseFloat(amount).toFixed(2)
-        })
+    addSource(source) {
+        this.data.push(source)
         this.saveData()
     }
 
