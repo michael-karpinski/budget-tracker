@@ -111,8 +111,23 @@ class MoneyFlow {
             amount.innerText = source.amount
             sourcesDiv.appendChild(header)
             sourcesDiv.appendChild(amount)
+            this.createDeleteButton(sourcesDiv, source.source)
         }))
         this.div.appendChild(sourcesDiv)
+    }
+
+    /**
+     * Creates a delete button that deletes the associated flow from memory.
+     * @param {DOMElement} sourcesDiv div where button is created.
+     * @param {String} sourceName     name of the source to be deleted.
+     */
+    createDeleteButton(sourcesDiv, sourceName) {
+        let button = document.createElement('button')
+        button.innerText = 'Delete'
+        button.addEventListener('click', () => {
+            this.deleteFlow(sourceName)
+        })
+        sourcesDiv.appendChild(button)
     }
 
     /**
@@ -132,6 +147,17 @@ class MoneyFlow {
             this.data.push(flow)
         else
             dialog.showErrorBox('Error', 'Please enter a unique source name.');
+        this.saveData()
+    }
+
+    /**
+     * 
+     * @param {String} flowName name of the flow to be deleted.
+     */
+    deleteFlow(flowName) {
+        for (let i = 0; i < this.data.length; i++)
+            if (this.data[i].source == flowName)
+                this.data.splice(i, 1)
         this.saveData()
     }
 

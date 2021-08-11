@@ -135,6 +135,9 @@ class Expense extends MoneyFlow {
                     paidCheckBox.checked = true
                 paidCheckBox.addEventListener('change', () => this.togglePaid(expense, paidCheckBox))
             }
+
+            // Add delete button.
+            this.createDeleteButton(expensesDiv, expense.source)
         }))
         this.div.appendChild(expensesDiv)
     }
